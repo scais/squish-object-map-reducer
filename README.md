@@ -11,7 +11,7 @@ After some time spent with this nice GUI automation tool I realized I miss somet
 manually is laborious and boring.  
 
 ## The input
-python squish-map-reducer.py -o object.map -t c:/workspace/test_suites/foo
+python map_reducer.py -o object.map -t c:/workspace/test_suites/foo
 
 ## The output
 object.map.reduced in current working directory
