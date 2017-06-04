@@ -13,6 +13,12 @@ def main():
                                                                    ' with \'tc_\'')
     args = parser.parse_args()
 
+    # TODO: Validate arguments
+    # TODO: Find all test files from specified folder
+    # TODO: Extract all used objects from test files into SET_1
+    # TODO: Extract all objects from object map into SET_2
+    # TODO: Create SET_3 containing objects from SET_2 which are part of SET_1 OR are referenced by objects in SET_2
+
 
 if __name__ == "__main__":
     main()
