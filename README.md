@@ -19,7 +19,8 @@ object.map.reduced in current working directory
 ### The object.map structure
 - Consists of several entries
 - Each valid entry is in format:
-  -  :NAME {ATTR1='VALUE' ATTR2='VALUE' ...}
+  -  :NAME  {ATTR1='VALUE' ATTR2='VALUE' ...}
+- Note there is a 'TAB' (not a space) between the end of 'NAME' and the opening '{' bracket
 - The number of attributes is not limited
 - The 'NAME':
   - Can contain spaces, dots, underscores ... basically anything
