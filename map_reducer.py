@@ -47,6 +47,7 @@ def main():
     # TODO: Validate arguments
     # TODO: Find all test files from specified folder
     # TODO: Extract all used objects from test files into SET_1
+    # TODO: Add support for global / local scripts files (can also contain objects references)
 
     objects_extractor = ObjectMapExtractor(args.o)
     object_map_objects = objects_extractor.extract_objects()
