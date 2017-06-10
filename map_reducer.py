@@ -1,4 +1,5 @@
 import argparse
+import re
 
 
 class SquishObject:
@@ -9,14 +10,22 @@ class SquishObject:
             self.value = value
             self.matching_type = matching_type
 
+        @staticmethod
+        def create_attribute(attribute_string):
+            match = re.search("([a-zA-Z.]+)([~]?[?]?[=])'(.+)'", attribute_string)
+            return SquishObject.Attribute(match.group(1), match.group(3), match.group(2))
+
     def __init__(self, name, attributes):
         self.name = name
         self.attributes = attributes
 
     @staticmethod
     def create_squish_object(object_map_line):
-        # TODO: Create SquishObject from a line of an object map
-        return SquishObject(None, None)
+        match = re.search("(:.+	){(.*)}", object_map_line)
+        name = match.group(1).strip()[1:]
+        attributes_string_array = match.group(2).split(' ')
+        attributes = [SquishObject.Attribute.create_attribute(x) for x in attributes_string_array]
+        return SquishObject(name, attributes)
 
 
 class ObjectMapExtractor:
