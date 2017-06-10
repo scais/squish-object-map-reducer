@@ -106,6 +106,23 @@ class TestObjectMapExtractor(unittest.TestCase):
         squish_objects = ObjectMapExtractor(lines).extract_objects()
         self.assertTrue(len(squish_objects) > 0)
 
+    def test_handles_incorrect_lines(self):
+
+        with open('objects.map.sample') as file:
+            lines = file.readlines()
+
+        squish_objects_orig = ObjectMapExtractor(lines).extract_objects()
+
+        lines.append("            ")
+        lines.append(":Wololooo")
+        lines.append(":Foo  FOO")
+        lines.append(":Foo  FOO")
+        lines.append(":Foo  {Bar=''}")
+        lines.append(":Foo  {Bar='Buz' Bux=''}")
+        lines.append(":Foo  {Bar='Buz' ''}")
+
+        squish_objects = ObjectMapExtractor(lines).extract_objects()
+        self.assertTrue(len(squish_objects) == len(squish_objects_orig))
 
 if __name__ == '__main__':
     unittest.main()
