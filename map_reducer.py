@@ -36,9 +36,10 @@ class ObjectMapExtractor:
         self.object_map_file_path = object_map_file_path
 
     def extract_objects(self):
-        # TODO: Read object map file path into list of strings
-        # TODO: Return dictionary SquishObject.name:SquishObject converted from the list of strings
-        return None
+        object_map_file = open(self.object_map_file_path, "r")
+        squish_objects = [SquishObject.create_squish_object(line) for line in object_map_file.readlines()]
+        object_map_file.close()
+        return squish_objects
 
 
 def main():
@@ -58,8 +59,7 @@ def main():
     # TODO: Extract all used objects from test files into SET_1
     # TODO: Add support for global / local scripts files (can also contain objects references)
 
-    objects_extractor = ObjectMapExtractor(args.o)
-    object_map_objects = objects_extractor.extract_objects()
+    objects_extractor = ObjectMapExtractor(args.o).extract_objects()
 
     # TODO: Create SET_3 containing objects from SET_2 which are part of SET_1 OR are referenced by objects in SET_2
 

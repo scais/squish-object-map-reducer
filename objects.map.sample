@@ -1,0 +1,7 @@
+:Foo	{bar='buz'}
+:Foo	{bar='buz' bux='brr'}
+:Bla.123.=-`]__[#;/.,{}()	{bar='buz'}
+:Foo	{wo.lo.lo.loo='buz'}
+:Foo	{Bar?='buz'}
+:Foo	{Bar~='buz'}
+:Foo	{Bar='.123.=-][#;/.,{}()__'}

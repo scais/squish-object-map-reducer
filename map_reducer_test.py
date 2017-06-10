@@ -1,11 +1,11 @@
 import unittest
 
-from map_reducer import SquishObject
+from map_reducer import SquishObject, ObjectMapExtractor
 
 
 class TestSquishObject(unittest.TestCase):
-
     def test_parse_object_with_one_attribute(self):
+
 
         line = ":Foo	{bar='buz'}"
 
@@ -95,6 +95,13 @@ class TestSquishObject(unittest.TestCase):
         self.assertEqual(squish_object.attributes[0].name, 'Bar')
         self.assertEqual(squish_object.attributes[0].value, ".123.=-][#;/.,{}()__")
         self.assertEqual(squish_object.attributes[0].matching_type, '=')
+
+
+class TestObjectMapExtractor(unittest.TestCase):
+
+    def test_extract_squish_objects_from_file(self):
+        squish_objects = ObjectMapExtractor('objects.map.sample').extract_objects()
+        self.assertTrue(len(squish_objects) > 0)
 
 if __name__ == '__main__':
     unittest.main()
