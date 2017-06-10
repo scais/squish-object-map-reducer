@@ -25,7 +25,7 @@ object.map.reduced in current working directory
 - The 'NAME':
   - Can contain spaces, dots, underscores ... basically anything
 - The 'ATTR':
-  - One lower-case word (from a set), only letters allowed
+  - One or more lower-case words (from a set), in the case of multiple words name the '.' separator is used
 - The '=':
   - Can be one of: '=', '?=', '~='
 - The 'VALUE'
