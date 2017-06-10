@@ -6,7 +6,6 @@ from map_reducer import SquishObject, ObjectMapExtractor
 class TestSquishObject(unittest.TestCase):
     def test_parse_object_with_one_attribute(self):
 
-
         line = ":Foo	{bar='buz'}"
 
         squish_object = SquishObject.create_squish_object(line)
@@ -100,8 +99,13 @@ class TestSquishObject(unittest.TestCase):
 class TestObjectMapExtractor(unittest.TestCase):
 
     def test_extract_squish_objects_from_file(self):
-        squish_objects = ObjectMapExtractor('objects.map.sample').extract_objects()
+
+        with open('objects.map.sample') as file:
+            lines = file.readlines()
+
+        squish_objects = ObjectMapExtractor(lines).extract_objects()
         self.assertTrue(len(squish_objects) > 0)
+
 
 if __name__ == '__main__':
     unittest.main()

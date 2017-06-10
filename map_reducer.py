@@ -30,15 +30,13 @@ class SquishObject:
 
 class ObjectMapExtractor:
 
-    object_map_file_path = ''
+    object_map_file_lines = ''
 
-    def __init__(self, object_map_file_path):
-        self.object_map_file_path = object_map_file_path
+    def __init__(self, object_map_file_lines):
+        self.object_map_file_lines = object_map_file_lines
 
     def extract_objects(self):
-        object_map_file = open(self.object_map_file_path, "r")
-        squish_objects = [SquishObject.create_squish_object(line) for line in object_map_file.readlines()]
-        object_map_file.close()
+        squish_objects = [SquishObject.create_squish_object(line) for line in self.object_map_file_lines]
         return squish_objects
 
 
