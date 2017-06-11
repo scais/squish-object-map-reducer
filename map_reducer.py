@@ -36,8 +36,8 @@ class ObjectMapExtractor:
         self.object_map_file_lines = object_map_file_lines
 
     def extract_objects(self):
-        # TODO: Remove incorrect lines
-        squish_objects = [SquishObject.create_squish_object(line) for line in self.object_map_file_lines]
+        valid_lines = list(filter(lambda x: re.match("(:.+	[{]){1}([a-zA-Z.]+\~?\??='[^']+' ?)+[}]", x), self.object_map_file_lines))
+        squish_objects = [SquishObject.create_squish_object(line) for line in valid_lines]
         return squish_objects
 
 
