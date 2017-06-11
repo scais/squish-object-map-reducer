@@ -4,7 +4,12 @@ import re
 
 class SquishObject:
 
+    line_regex = re.compile("(:.+	){(.*)}")
+
     class Attribute:
+
+        attribute_regex = re.compile("([a-zA-Z.]+)([~]?[?]?[=])'(.+)'")
+
         def __init__(self, name, value, matching_type='='):
             self.name = name
             self.value = value
@@ -12,7 +17,7 @@ class SquishObject:
 
         @staticmethod
         def create_attribute(attribute_string):
-            match = re.match("([a-zA-Z.]+)([~]?[?]?[=])'(.+)'", attribute_string)
+            match = SquishObject.Attribute.attribute_regex.match(attribute_string)
             return SquishObject.Attribute(match.group(1), match.group(3), match.group(2))
 
     def __init__(self, name, attributes):
@@ -21,7 +26,7 @@ class SquishObject:
 
     @staticmethod
     def create_squish_object(object_map_line):
-        match = re.match("(:.+	){(.*)}", object_map_line)
+        match = SquishObject.line_regex.match(object_map_line)
         name = match.group(1).strip()[1:]
         attributes_string_array = match.group(2).split(' ')
         attributes = [SquishObject.Attribute.create_attribute(x) for x in attributes_string_array]
@@ -31,12 +36,13 @@ class SquishObject:
 class ObjectMapExtractor:
 
     object_map_file_lines = ''
+    valid_line_regex = re.compile("(:.+	[{]){1}([a-zA-Z.]+\~?\??='[^']+' ?)+[}]")
 
     def __init__(self, object_map_file_lines):
         self.object_map_file_lines = object_map_file_lines
 
     def extract_objects(self):
-        valid_lines = list(filter(lambda x: re.match("(:.+	[{]){1}([a-zA-Z.]+\~?\??='[^']+' ?)+[}]", x), self.object_map_file_lines))
+        valid_lines = list(filter(lambda x: self.valid_line_regex.match(x), self.object_map_file_lines))
         squish_objects = [SquishObject.create_squish_object(line) for line in valid_lines]
         return squish_objects
 
