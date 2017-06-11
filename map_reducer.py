@@ -12,7 +12,7 @@ class SquishObject:
 
         @staticmethod
         def create_attribute(attribute_string):
-            match = re.search("([a-zA-Z.]+)([~]?[?]?[=])'(.+)'", attribute_string)
+            match = re.match("([a-zA-Z.]+)([~]?[?]?[=])'(.+)'", attribute_string)
             return SquishObject.Attribute(match.group(1), match.group(3), match.group(2))
 
     def __init__(self, name, attributes):
@@ -21,7 +21,7 @@ class SquishObject:
 
     @staticmethod
     def create_squish_object(object_map_line):
-        match = re.search("(:.+	){(.*)}", object_map_line)
+        match = re.match("(:.+	){(.*)}", object_map_line)
         name = match.group(1).strip()[1:]
         attributes_string_array = match.group(2).split(' ')
         attributes = [SquishObject.Attribute.create_attribute(x) for x in attributes_string_array]
