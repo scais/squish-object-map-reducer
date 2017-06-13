@@ -42,9 +42,15 @@ class ObjectMapExtractor:
         self.object_map_file_lines = object_map_file_lines
 
     def extract_objects(self):
-        valid_lines = list(filter(lambda x: self.valid_line_regex.match(x), self.object_map_file_lines))
+        valid_lines = set(list(filter(lambda x: self.valid_line_regex.match(x), self.object_map_file_lines)))
+        self.print_invalid_lines(valid_lines)
         squish_objects = [SquishObject.create_squish_object(line) for line in valid_lines]
         return squish_objects
+
+    def print_invalid_lines(self, valid_lines):
+        not_valid_lines = set(self.object_map_file_lines) - valid_lines
+        for not_valid_line in not_valid_lines:
+            print "Line \"{}\" is not valid - SKIPPING".format(not_valid_line)
 
 
 def main():
