@@ -14,7 +14,7 @@ manually is laborious and boring.
 python map_reducer.py --o object.map --t c:/workspace/test_suites/foo
 
 ## The output
-object.map.reduced in current working directory
+object.map.reduced in the current working directory
 
 ### The object.map structure
 - Consists of several entries
