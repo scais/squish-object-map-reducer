@@ -1,5 +1,6 @@
 import argparse
 import re
+import os.path
 
 
 class SquishObject:
@@ -53,6 +54,18 @@ class ObjectMapExtractor:
             print "Line \"{}\" is not valid - SKIPPING".format(not_valid_line)
 
 
+def prepare_valid_files(files_paths_list):
+    for file_path in files_paths_list:
+        if os.path.exists(file_path):
+            if os.path.isfile(file_path):
+                pass # TODO
+            else:
+                pass # TODO
+        else:
+            print "File \"{}\" does not exist - SKIPPING".format(file_path)
+    pass
+
+
 def main():
     parser = argparse.ArgumentParser(description="Reduces the Squish object map by removing duplicated and 'not used' "
                                                  "entries. As 'not used' entry is considered any object inside object "
@@ -72,7 +85,7 @@ def main():
     # TODO: Find all test files from specified folder
     # TODO: Extract all used objects from test files into SET_1
     # TODO: Add support for global / local scripts files (can also contain objects references)
-
+    files_list = prepare_valid_files(args.t)
     objects_extractor = ObjectMapExtractor(args.o).extract_objects()
 
     # TODO: Create SET_3 containing objects from SET_2 which are part of SET_1 OR are referenced by objects in SET_2
