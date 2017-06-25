@@ -54,15 +54,18 @@ class ObjectMapExtractor:
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Reduces the Squish object map by removing duplicates and not used'
-                                                 ' entries',
+    parser = argparse.ArgumentParser(description="Reduces the Squish object map by removing duplicated and 'not used' "
+                                                 "entries. As 'not used' entry is considered any object inside object "
+                                                 "map that is not found inside any of processed files.",
                                      epilog='The reduced map file will be saved in the script working directory with'
                                             ' name \'object.map.reduced\'')
     parser.add_argument('--o', metavar='path-to-object-map', help='Path to the Squish object map file.')
-    parser.add_argument('--t', metavar='path-to-test-folder', help='Path to the folder with tests. The content of this'
-                                                                   ' folder (and recursively all its sub-folders) is'
-                                                                   ' going to be searched for python files starting'
-                                                                   ' with \'tc_\'')
+    parser.add_argument('--t', metavar='file-to-process',  nargs='+', help="File which content will be processed in "
+                                                                           "order to find any references to objects "
+                                                                           "from Squish object map. If a folder is "
+                                                                           "given, all files recursively gathered from "
+                                                                           "the folder and it's sub-folders are going "
+                                                                           "to be processed.")
     args = parser.parse_args()
 
     # TODO: Validate arguments
