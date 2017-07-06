@@ -54,16 +54,24 @@ class ObjectMapExtractor:
             print "Line \"{}\" is not valid - SKIPPING".format(not_valid_line)
 
 
-def prepare_valid_files(files_paths_list):
-    for file_path in files_paths_list:
-        if os.path.exists(file_path):
-            if os.path.isfile(file_path):
-                pass # TODO
+class ValidFilesArranger:
+
+    file_type = ''
+
+    def __init__(self, file_type):
+        self.file_type = file_type
+
+    def prepare_valid_files(self, files_paths_list):
+        valid_files = []
+        for file_path in files_paths_list:
+            if os.path.exists(file_path):
+                if os.path.isfile(file_path):
+                    pass # TODO
+                else:
+                    pass # TODO
             else:
-                pass # TODO
-        else:
-            print "File \"{}\" does not exist - SKIPPING".format(file_path)
-    pass
+                print "File \"{}\" does not exist - SKIPPING".format(file_path)
+        return valid_files
 
 
 def main():
@@ -85,7 +93,7 @@ def main():
     # TODO: Find all test files from specified folder
     # TODO: Extract all used objects from test files into SET_1
     # TODO: Add support for global / local scripts files (can also contain objects references)
-    files_list = prepare_valid_files(args.t)
+    files_list = ValidFilesArranger('py').prepare_valid_files(args.t)
     objects_extractor = ObjectMapExtractor(args.o).extract_objects()
 
     # TODO: Create SET_3 containing objects from SET_2 which are part of SET_1 OR are referenced by objects in SET_2
