@@ -1,6 +1,7 @@
 import argparse
-import re
+import glob
 import os.path
+import re
 
 
 class SquishObject:
@@ -65,10 +66,12 @@ class ValidFilesArranger:
         valid_files = []
         for file_path in files_paths_list:
             if os.path.exists(file_path):
-                if os.path.isfile(file_path):
-                    pass # TODO
+                if os.path.isfile(file_path) and file_path.endswith('.' + self.file_type):
+                    valid_files.append(file_path)
                 else:
-                    pass # TODO
+                    files_in_dir = glob.glob(os.path.join(file_path, "*"))
+                    valid_files_in_dir = self.prepare_valid_files(files_in_dir)
+                    valid_files.extend(valid_files_in_dir)
             else:
                 print "File \"{}\" does not exist - SKIPPING".format(file_path)
         return valid_files

@@ -1,5 +1,7 @@
-import unittest
+import os
 import tempfile
+import unittest
+
 
 from map_reducer import SquishObject, ObjectMapExtractor, ValidFilesArranger
 
@@ -137,42 +139,154 @@ class TestValidFilesArranger(unittest.TestCase):
 
     def test_existing_file_returns_list_size_one(self):
 
-        temp_file = tempfile.NamedTemporaryFile(suffix='foo')
+        temp_file = tempfile.NamedTemporaryFile(suffix='.foo')
 
         valid_files_list = ValidFilesArranger('foo').prepare_valid_files([temp_file.name])
+
+        temp_file.close()
 
         self.assertTrue(len(valid_files_list) == 1)
         self.assertTrue(valid_files_list[0] == temp_file.name)
 
+    def test_two_existing_files_return_list_size_two(self):
+
+        temp_file = tempfile.NamedTemporaryFile(suffix='.foo')
+        temp_file_two = tempfile.NamedTemporaryFile(suffix='.foo')
+
+        valid_files_list = ValidFilesArranger('foo').prepare_valid_files([temp_file.name, temp_file_two.name])
+
+        temp_file.close()
+        temp_file_two.close()
+
+        self.assertTrue(len(valid_files_list) == 2)
+        self.assertTrue(valid_files_list[0] == temp_file.name)
+        self.assertTrue(valid_files_list[1] == temp_file_two.name)
+
     def test_existing_folder_with_one_file_returns_list_size_one(self):
-        pass
+
+        temp_dir = tempfile.mkdtemp()
+        temp_file = tempfile.NamedTemporaryFile(suffix='.foo', dir=temp_dir)
+
+        valid_files_list = ValidFilesArranger('foo').prepare_valid_files([temp_dir])
+
+        temp_file.close()
+        os.removedirs(temp_dir)
+
+        self.assertTrue(len(valid_files_list) == 1)
+        self.assertTrue(valid_files_list[0] == temp_file.name)
+
+    def test_existing_folder_with_two_files_returns_list_size_two(self):
+
+        temp_dir = tempfile.mkdtemp()
+        temp_file = tempfile.NamedTemporaryFile(suffix='.foo', dir=temp_dir)
+        temp_file_two = tempfile.NamedTemporaryFile(suffix='.foo', dir=temp_dir)
+
+        valid_files_list = ValidFilesArranger('foo').prepare_valid_files([temp_dir])
+
+        temp_file.close()
+        temp_file_two.close()
+        os.removedirs(temp_dir)
+
+        self.assertTrue(len(valid_files_list) == 2)
+        self.assertTrue(valid_files_list[0] == temp_file.name)
+        self.assertTrue(valid_files_list[1] == temp_file_two.name)
+
+    def test_file_and_folder_with_file_returns_list_size_two(self):
+
+        temp_dir = tempfile.mkdtemp()
+        temp_file = tempfile.NamedTemporaryFile(suffix='.foo', dir=temp_dir)
+        temp_file_two = tempfile.NamedTemporaryFile(suffix='.foo')
+
+        valid_files_list = ValidFilesArranger('foo').prepare_valid_files([temp_dir, temp_file_two.name])
+
+        temp_file.close()
+        temp_file_two.close()
+        os.removedirs(temp_dir)
+
+        self.assertTrue(len(valid_files_list) == 2)
+        self.assertTrue(valid_files_list[0] == temp_file.name)
+        self.assertTrue(valid_files_list[1] == temp_file_two.name)
+
+    def test_two_folders_each_with_file_returns_list_size_two(self):
+
+        temp_dir = tempfile.mkdtemp()
+        temp_file = tempfile.NamedTemporaryFile(suffix='.foo', dir=temp_dir)
+
+        temp_dir_two = tempfile.mkdtemp()
+        temp_file_two = tempfile.NamedTemporaryFile(suffix='.foo', dir=temp_dir_two)
+
+        valid_files_list = ValidFilesArranger('foo').prepare_valid_files([temp_dir, temp_dir_two])
+
+        temp_file.close()
+        temp_file_two.close()
+        os.removedirs(temp_dir)
+        os.removedirs(temp_dir_two)
+
+        self.assertTrue(len(valid_files_list) == 2)
+        self.assertTrue(valid_files_list[0] == temp_file.name)
+        self.assertTrue(valid_files_list[1] == temp_file_two.name)
 
     def test_folder_containing_folder_containing_file_returns_list_size_one(self):
-        pass
+
+        temp_dir_parent = tempfile.mkdtemp()
+        temp_dir = tempfile.mkdtemp(dir = temp_dir_parent)
+        temp_file = tempfile.NamedTemporaryFile(suffix='.foo', dir=temp_dir)
+
+        valid_files_list = ValidFilesArranger('foo').prepare_valid_files([temp_dir_parent])
+
+        temp_file.close()
+        os.removedirs(temp_dir)
+
+        self.assertTrue(len(valid_files_list) == 1)
+        self.assertTrue(valid_files_list[0] == temp_file.name)
 
     def test_file_with_not_valid_suffix_returns_empty_list(self):
-        pass
+
+        temp_file = tempfile.NamedTemporaryFile(suffix='.foo')
+
+        valid_files_list = ValidFilesArranger('bar').prepare_valid_files([temp_file.name])
+
+        temp_file.close()
+
+        self.assertTrue(len(valid_files_list) == 0)
 
     def test_folder_containing_file_with_not_valid_suffix_returns_empty_list(self):
-        pass
+
+        temp_dir = tempfile.mkdtemp()
+        temp_file = tempfile.NamedTemporaryFile(suffix='.foo', dir=temp_dir)
+
+        valid_files_list = ValidFilesArranger('bar').prepare_valid_files([temp_dir])
+
+        temp_file.close()
+        os.removedirs(temp_dir)
+
+        self.assertTrue(len(valid_files_list) == 0)
 
     def test_existing_folder_without_files_returns_emtpy_list(self):
-        pass
 
-    def test_non_existent_folder_returns_empty_list(self):
-        pass
+        temp_dir = tempfile.mkdtemp()
 
-    def test_non_existent_file_returns_empty_list(self):
-        pass
+        valid_files_list = ValidFilesArranger('bar').prepare_valid_files([temp_dir])
 
-    def test_non_existent_files_return_empty_list(self):
-        pass
+        os.removedirs(temp_dir)
 
-    def test_non_existent_folders_return_empty_list(self):
-        pass
+        self.assertTrue(len(valid_files_list) == 0)
 
-    def test_non_existent_and_files_folders_return_empty_list(self):
-        pass
+    def test_non_existing_file_return_empty_list(self):
+        temp_dir = 'foo/bar/buz/baz'
+
+        valid_files_list = ValidFilesArranger('bar').prepare_valid_files([temp_dir])
+
+        self.assertTrue(len(valid_files_list) == 0)
+
+    def test_non_existing_files_returns_empty_list(self):
+
+        temp_file_1 = 'foo/bar/buz/baz'
+        temp_file_2 = 'foo/bar/buz/baz/boo'
+
+        valid_files_list = ValidFilesArranger('bar').prepare_valid_files([temp_file_1, temp_file_2])
+
+        self.assertTrue(len(valid_files_list) == 0)
 
 if __name__ == '__main__':
     unittest.main()
