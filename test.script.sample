@@ -1,0 +1,34 @@
+BUZ = ':Buz'
+
+class Foo():
+
+    def simple(self):
+        FOO = ':Foo'
+        BAR = ':Bar'
+        BOO = ':Boo'
+
+        BLA = ':Bla.123.'
+        BLABLA = ":Bla.123.321"
+        BLABLABLA = ":Bla.123.321.123"
+
+        fooo = ':foo_bar_bux'
+
+    def in_function(self):
+        waitForObject(':Bla')
+        waitForObject(':Bla.123.1')
+        waitForObject(":Bla.123.2")
+        mouseClick(waitForObject(":Bla.123.3"))
+
+    def a_bit_more_complex(self):
+        first = ":FOO/BOO++ - foo/bar/bux.foo - Some_awesome_text"
+        second = ":Foo Bar.Bux..._Boo"
+        third = ":Foo bar.bux.baz.boo:_loo"
+        fourth= ":BAR FOO/BOO++ BUX - Foo/Bar/BUX.foo - Foo.Bar.Buz.foo_FooFooFoo"
+
+    def squish_docs_samples(self):
+        foo = ":Address Book - Add.OK_QPushButton"
+        foo = ':xyz_CMainwindow'
+        foo = ":CSV Table - before.csv.File_QTableWidget"
+        foo = ":CSV Table.File_QTableWidget"
+        foo = ":fileNameEdit_QLineEdit"
+        foo = ":Make Payment.Card Type:_QLabel"

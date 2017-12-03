@@ -34,6 +34,10 @@ class SquishObject:
         attributes = [SquishObject.Attribute.create_attribute(x) for x in attributes_string_array]
         return SquishObject(name, attributes)
 
+    # Hack: We compare only names, not attributes!
+    def __eq__(self, other):
+        return self.name == other.name
+
 
 class ObjectMapExtractor:
 
@@ -77,6 +81,27 @@ class ValidFilesArranger:
         return valid_files
 
 
+class TestScriptsExtractor:
+
+    name_regex = re.compile("(['\"]:(.+)['\"])")
+
+    found_squish_objects = []
+    files_path_list = []
+
+    def __init__(self, files_path_list):
+        self.files_path_list = files_path_list
+
+    def find_squish_objects(self):
+        for file_path in self.files_path_list:
+            with open(file_path) as file_to_read:
+                lines = file_to_read.readlines()
+            for line in lines:
+                match = self.name_regex.search(line)
+                if match:
+                    self.found_squish_objects.append(SquishObject(match.group(2), ''))
+        return self.found_squish_objects
+
+
 def main():
     parser = argparse.ArgumentParser(description="Reduces the Squish object map by removing duplicated and 'not used' "
                                                  "entries. As 'not used' entry is considered any object inside object "
@@ -93,12 +118,11 @@ def main():
     args = parser.parse_args()
 
     # TODO: Validate arguments
-    # TODO: Find all test files from specified folder
-    # TODO: Extract all used objects from test files into SET_1
     # TODO: Add support for global / local scripts files (can also contain objects references)
     files_list = ValidFilesArranger('py').prepare_valid_files(args.t)
+    # TODO: ObjectMapExtractor takes list of lines, not a file path!
     objects_extractor = ObjectMapExtractor(args.o).extract_objects()
-
+    squish_objects_in_test_files = TestScriptsExtractor(files_list).find_squish_objects()
     # TODO: Create SET_3 containing objects from SET_2 which are part of SET_1 OR are referenced by objects in SET_2
 
 

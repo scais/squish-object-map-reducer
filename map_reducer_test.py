@@ -3,7 +3,7 @@ import tempfile
 import unittest
 
 
-from map_reducer import SquishObject, ObjectMapExtractor, ValidFilesArranger
+from map_reducer import SquishObject, ObjectMapExtractor, ValidFilesArranger, TestScriptsExtractor
 
 
 class TestSquishObject(unittest.TestCase):
@@ -188,8 +188,8 @@ class TestValidFilesArranger(unittest.TestCase):
         os.removedirs(temp_dir)
 
         self.assertTrue(len(valid_files_list) == 2)
-        self.assertTrue(valid_files_list[0] == temp_file.name)
-        self.assertTrue(valid_files_list[1] == temp_file_two.name)
+        self.assertTrue(temp_file.name in valid_files_list)
+        self.assertTrue(temp_file_two.name in valid_files_list)
 
     def test_file_and_folder_with_file_returns_list_size_two(self):
 
@@ -287,6 +287,37 @@ class TestValidFilesArranger(unittest.TestCase):
         valid_files_list = ValidFilesArranger('bar').prepare_valid_files([temp_file_1, temp_file_2])
 
         self.assertTrue(len(valid_files_list) == 0)
+
+
+class TestTestFilesExtractor(unittest.TestCase):
+
+    def test_extract_squish_objects_from_file(self):
+
+        squish_objects = TestScriptsExtractor(['test.script.sample']).find_squish_objects()
+
+        self.assertTrue(SquishObject('Buz', '') in squish_objects)
+        self.assertTrue(SquishObject('Foo', '') in squish_objects)
+        self.assertTrue(SquishObject('Bar', '') in squish_objects)
+        self.assertTrue(SquishObject('Boo', '') in squish_objects)
+        self.assertTrue(SquishObject('Bla.123.', '') in squish_objects)
+        self.assertTrue(SquishObject('Bla.123.321', '') in squish_objects)
+        self.assertTrue(SquishObject('Bla.123.321.123', '') in squish_objects)
+        self.assertTrue(SquishObject('foo_bar_bux', '') in squish_objects)
+        self.assertTrue(SquishObject('Bla', '') in squish_objects)
+        self.assertTrue(SquishObject('Bla.123.1', '') in squish_objects)
+        self.assertTrue(SquishObject('Bla.123.2', '') in squish_objects)
+        self.assertTrue(SquishObject('Bla.123.3', '') in squish_objects)
+        self.assertTrue(SquishObject('FOO/BOO++ - foo/bar/bux.foo - Some_awesome_text', '') in squish_objects)
+        self.assertTrue(SquishObject('Foo Bar.Bux..._Boo', '') in squish_objects)
+        self.assertTrue(SquishObject('Foo bar.bux.baz.boo:_loo', '') in squish_objects)
+        self.assertTrue(SquishObject('BAR FOO/BOO++ BUX - Foo/Bar/BUX.foo - Foo.Bar.Buz.foo_FooFooFoo', '') in squish_objects)
+        self.assertTrue(SquishObject('Address Book - Add.OK_QPushButton', '') in squish_objects)
+        self.assertTrue(SquishObject('xyz_CMainwindow', '') in squish_objects)
+        self.assertTrue(SquishObject('CSV Table - before.csv.File_QTableWidget', '') in squish_objects)
+        self.assertTrue(SquishObject('CSV Table.File_QTableWidget', '') in squish_objects)
+        self.assertTrue(SquishObject('fileNameEdit_QLineEdit', '') in squish_objects)
+        self.assertTrue(SquishObject('Make Payment.Card Type:_QLabel', '') in squish_objects)
+
 
 if __name__ == '__main__':
     unittest.main()
